@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+branch="$(git rev-parse --abbrev-ref HEAD)"
+
+if [ "$branch" = "main" ]; then
+  echo "🚫 Não pode haver commits diretamente na branch $branch"
+  echo "   ✓ Salve as alterações: git stash"
+  echo "   ✓ Crie uma nova branch: git checkout -b nome_branch"
+  echo "   ✓ Aplique as alterações salvas: git stash apply"
+  exit 1
+fi
+
+npm run lint:fix
+git add .
+
+

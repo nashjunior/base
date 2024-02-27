@@ -1,0 +1,10 @@
+node_modules
+build
+.env
+dist
+coverage
+private.key
+public.key
+
+
+/documentos/**

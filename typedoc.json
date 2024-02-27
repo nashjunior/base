@@ -1,0 +1,13 @@
+{
+  "entryPoints": ["src/server.ts"],
+  "out": "./docs",
+  "name": "Meu Projeto Incrível",
+  "theme": "default",
+  "exclude": ["**/node_modules/**", "**/*.spec.ts"],
+  "excludeExternals": true,
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "includeVersion": true,
+  "readme": "none",
+  "categoryOrder": ["Uma Categoria", "Outra Categoria", "*"]
+}

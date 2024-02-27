@@ -1,0 +1,57 @@
+name: Build
+
+on: 
+  push:
+    branches:
+      - develop
+
+jobs:
+  run-unit-tests:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 14
+          cache: 'npm'
+      
+      - name: Install OpenVPN
+        run: |
+          sudo apt update
+          sudo apt install -y openvpn openvpn-systemd-resolved
+      - name: Connect to VPN
+        uses: "kota65535/github-openvpn-connect-action@v2"
+        with:
+          config_file: ./.github/workflows/client.ovpn
+          username: ${{ secrets.OVPN_USERNAME }}
+          password: ${{ secrets.OVPN_PASSWORD }}
+
+      # - name: Deploy to Server
+      #   uses: easingthemes/ssh-deploy@main
+      #   env:
+      #     SSH_PRIVATE_KEY: ${{ secrets.KEY_SSH }}
+      #     ARGS: "-rlgoDzvc -i --delete"
+      #     SOURCE: "dist/"
+      #     REMOTE_HOST: ${{ secrets.HOST_HOMOLOGACAO }}
+      #     REMOTE_USER: ${{ secrets.USERNAME_HOMOLOGACAO }}
+      #     TARGET: "/var/apisystem/segep2"
+      #     EXCLUDE: "/dist/, /node_modules/"
+      # - name: Check VPN connection
+      #   run: |
+      #     echo ${{ secrets.USERNAME_HOMOLOGACAO }}@${{ secrets.HOST_HOMOLOGACAO }}
+
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_HOMOLOGACAO }}
+          username: ${{ secrets.USERNAME_HOMOLOGACAO }}
+          key: ${{ secrets.KEY_SSH }}
+          # password: ${{ secrets.PASSWORD_HOMOLOGACAO }}
+          # port: ${{ secrets.PORT }}
+          script: ls
+
+      
+            
